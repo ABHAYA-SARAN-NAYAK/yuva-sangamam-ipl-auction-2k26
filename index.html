@@ -786,6 +786,9 @@
       renderLogsTable();
       renderSquadsView();
 
+      // AUTO-SYNC: Fetches all bids from Google Sheets on page load
+      fetchLogsFromGoogleSheets();
+
       const bidInput = document.getElementById('bid-amount-input');
       bidInput.addEventListener('input', (e) => {
         updateLakhsDisplay(parseFloat(e.target.value) || 0);
@@ -799,6 +802,25 @@
         }
       });
     });
+
+    // Pulls the latest live Google Sheet data across all phones & laptops
+    async function fetchLogsFromGoogleSheets() {
+      if (!sheetsWebhookUrl) return;
+      try {
+        const response = await fetch(sheetsWebhookUrl);
+        const data = await response.json();
+        if (data && data.logs) {
+          auctionLogs = data.logs;
+          localStorage.setItem('ipl_auction_logs', JSON.stringify(auctionLogs));
+          updateGlobalStats();
+          renderPurseSidebar();
+          renderLogsTable();
+          renderSquadsView();
+        }
+      } catch (err) {
+        console.warn("Using offline local data:", err);
+      }
+    }
 
     function updateConnectionStatusUI() {
       const isConnected = !!sheetsWebhookUrl && sheetsWebhookUrl.startsWith('http');
