@@ -732,8 +732,10 @@
     ];
 
     // State Variables
+    const DEFAULT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwqv40BCKTolDK8f5_PHlXWSXm0iZwKnWS6shv5aXY_CDz0UBnzWrRx1SAOfI9Xn5Jb/exec";
+
     let auctionLogs = JSON.parse(localStorage.getItem('ipl_auction_logs') || '[]');
-    let sheetsWebhookUrl = localStorage.getItem('ipl_sheets_webhook') || '';
+    let sheetsWebhookUrl = localStorage.getItem('ipl_sheets_webhook') || DEFAULT_WEBHOOK_URL;
     let selectedPlayer = null;
     let selectedTeam = null;
 
